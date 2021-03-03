@@ -1,7 +1,8 @@
 {
-  "include": ["pack"],
-  "venvPath": "env",
-
+  "include": [
+    "hate_speech"
+  ],
+  "venvPath": "venv",
   "reportUnknownVariableType": true,
   "reportUnknownMemberType": true,
   "reportUnusedImport": true,
@@ -19,7 +20,6 @@
   "reportUnnecessaryCast": true,
   "reportAssertAlwaysTrue": true,
   "reportSelfClsParameterName": true,
-
   "pythonVersion": "3.7",
   "pythonPlatform": "Linux"
 }

@@ -1,0 +1,4 @@
+transformers
+torch >= 1.4.0
+tensorboard
+tqdm
