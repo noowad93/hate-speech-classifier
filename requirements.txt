@@ -1,4 +1,5 @@
 transformers
+pytorch-lightning
 torch >= 1.4.0
 tensorboard
 tqdm
