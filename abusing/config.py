@@ -17,10 +17,10 @@ class TrainConfig(NamedTuple):
     batch_size: int = 64
     #: learning rate
     learning_rate: float = 5e-5
-    #: max sequence length
-    max_sequence_length: int = 128
     #: warm up
     warmup_ratio: float = 0.0
+    #: num workers
+    num_workers: int = 20
 
     """
     Data Hyperparameters

@@ -13,16 +13,12 @@ class AbusingDataset(Dataset):
         self,
         instances: List[Tuple[str, int, int]],
         tokenizer: ElectraTokenizer,
-        max_seq_len: int,
     ):
         self.instances = instances
         self.tokenizer = tokenizer
-        self.max_seq_len = max_seq_len
 
     def __getitem__(self, index: int) -> InstanceType:
-        features = self.tokenizer.encode_plus(
-            text=self.instances[index][0], add_special_tokens=True, max_length=self.max_seq_len
-        )
+        features = self.tokenizer.encode_plus(text=self.instances[index][0], add_special_tokens=True)
         bias_label = torch.tensor(self.instances[index][1])
         hate_label = torch.tensor(self.instances[index][2])
         features = [torch.tensor(features[key]) for key in ["input_ids", "attention_mask", "token_type_ids"]]

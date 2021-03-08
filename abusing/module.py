@@ -5,13 +5,12 @@ import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.metrics import classification_report, f1_score
+from sklearn.metrics import classification_report
 from torch.optim import AdamW
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import Dataset
 from transformers import ElectraModel
 
 from abusing.config import TrainConfig
-from abusing.dataset import AbusingDataset
 
 logger = logging.getLogger("lightning")
 
@@ -52,30 +51,17 @@ class AbusingClassifier(pl.LightningModule):
         hate_logits = self.hate_classifier.forward(pooled_output)
         return bias_logits, hate_logits
 
-    def train_dataloader(self):
-        return DataLoader(
-            self.train_dataset,
-            batch_size=self.config.batch_size,
-            shuffle=True,
-            collate_fn=AbusingDataset.collate_fn,
-        )
-
-    def val_dataloader(self):
-        return DataLoader(self.valid_dataset, batch_size=self.config.batch_size, collate_fn=AbusingDataset.collate_fn)
-
     def training_step(self, batch: Tuple[torch.Tensor, ...], batch_idx: int):
         *features, bias_labels, hate_labels = batch
         bias_logits, hate_logits = self.forward(*features)
         bias_loss = self.criterion(bias_logits, bias_labels)
         hate_loss = self.criterion(hate_logits, hate_labels)
         train_loss = bias_loss + hate_loss
-        self.log("train_loss", train_loss, prog_bar=True, logger=True)
         return train_loss
 
     def validation_step(self, batch: Tuple[torch.Tensor, ...], batch_idx: int):
         *features, bias_labels, hate_labels = batch
         bias_logits, hate_logits = self.forward(*features)
-
         return bias_logits, bias_labels, hate_logits, hate_labels
 
     def validation_epoch_end(self, outputs: List[Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]]):
@@ -91,11 +77,8 @@ class AbusingClassifier(pl.LightningModule):
             target_hate_labels.extend(output[3].view(-1).tolist())
         bias_report = classification_report(target_bias_labels, predicted_bias_labels)
         hate_report = classification_report(target_hate_labels, predicted_hate_labels)
-        bias_f1_score = f1_score(target_bias_labels, predicted_bias_labels, average="macro")
-        hate_f1_score = f1_score(target_hate_labels, predicted_hate_labels, average="macro")
         logging.info(bias_report)
         logging.info(hate_report)
-        logging.info(f"bias f1 score:{bias_f1_score}\t hate f1 score:{hate_f1_score}")
 
     def configure_optimizers(self):
         return AdamW(self.parameters(), lr=self.learning_rate)
