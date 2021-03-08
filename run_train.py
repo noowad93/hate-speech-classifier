@@ -14,10 +14,6 @@ def main():
 
     # Config
     config = TrainConfig()
-    torch.manual_seed(config.seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-
     # Fixing Seed
     pl.seed_everything(config.seed)
 
