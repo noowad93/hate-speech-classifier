@@ -1,4 +1,3 @@
-import os
 import time
 from typing import NamedTuple
 
@@ -13,7 +12,7 @@ class TrainConfig(NamedTuple):
     #: 사용할 gpu 갯수
     gpus: int = 1
     #: epoch 도는 횟수
-    num_epochs: int = 3
+    num_epochs: int = 5
     #: 훈련 시의 batch size
     batch_size: int = 64
     #: learning rate

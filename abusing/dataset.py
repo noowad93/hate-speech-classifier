@@ -1,8 +1,9 @@
-import torch
 from typing import List, Tuple
+
+import torch
+from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import Dataset
 from transformers import ElectraTokenizer
-from torch.nn.utils.rnn import pad_sequence
 
 InstanceType = Tuple[torch.Tensor, ...]
 

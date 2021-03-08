@@ -1,18 +1,19 @@
-from typing import Tuple, List
+import logging
+from typing import List, Tuple
 
+import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.optim import AdamW
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader
-from transformers import ElectraModel
-from abusing.config import TrainConfig
 from sklearn.metrics import classification_report, f1_score
-import pytorch_lightning as pl
-import torch
+from torch.optim import AdamW
+from torch.utils.data import DataLoader, Dataset
+from transformers import ElectraModel
 
+from abusing.config import TrainConfig
 from abusing.dataset import AbusingDataset
+
+logger = logging.getLogger("lightning")
 
 
 class AbusingClassifier(pl.LightningModule):
@@ -92,9 +93,9 @@ class AbusingClassifier(pl.LightningModule):
         hate_report = classification_report(target_hate_labels, predicted_hate_labels)
         bias_f1_score = f1_score(target_bias_labels, predicted_bias_labels, average="macro")
         hate_f1_score = f1_score(target_hate_labels, predicted_hate_labels, average="macro")
-        print(bias_report)
-        print(hate_report)
-        print(f"bias f1 score:{bias_f1_score}\t hate f1 score:{hate_f1_score}")
+        logging.info(bias_report)
+        logging.info(hate_report)
+        logging.info(f"bias f1 score:{bias_f1_score}\t hate f1 score:{hate_f1_score}")
 
     def configure_optimizers(self):
         return AdamW(self.parameters(), lr=self.learning_rate)

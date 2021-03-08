@@ -1,6 +1,5 @@
 from typing import List, Tuple
 
-
 BIAS_LABEL_DICT = {"none": 0, "gender": 1, "others": 2}
 HATE_LABEL_DICT = {"none": 0, "hate": 1, "offensive": 2}
 

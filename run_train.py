@@ -10,9 +10,6 @@ from abusing.module import AbusingClassifier
 
 
 def main():
-    # Logger
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger("lightning")
 
     # Config
     config = TrainConfig()
@@ -26,7 +23,6 @@ def main():
     # Data Loading...
     raw_train_instances = load_data(config.train_file_path)
     raw_dev_instances = load_data(config.dev_file_path)
-    logger.info(f"학습 데이터 개수: {len(raw_train_instances)}\t개발 데이터 개수: {len(raw_dev_instances)}")
 
     tokenizer = ElectraTokenizer.from_pretrained(config.pretrained_model_name, do_lower_case=False)
 
