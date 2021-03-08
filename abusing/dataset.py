@@ -32,7 +32,6 @@ class AbusingDataset(Dataset):
 
     @staticmethod
     def collate_fn(batch: List[InstanceType]):
-        print([features[0] for features in batch])
         input_ids = pad_sequence([features[0] for features in batch], batch_first=True, padding_value=0)
         attention_mask = pad_sequence([features[1] for features in batch], batch_first=True, padding_value=0)
         token_type_ids = pad_sequence([features[2] for features in batch], batch_first=True, padding_value=0)

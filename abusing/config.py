@@ -10,6 +10,8 @@ class TrainConfig(NamedTuple):
 
     #: random seed
     seed: int = 42
+    #: 사용할 gpu 갯수
+    gpus: int = 1
     #: epoch 도는 횟수
     num_epochs: int = 3
     #: 훈련 시의 batch size
@@ -32,5 +34,3 @@ class TrainConfig(NamedTuple):
     pretrained_model_name: str = "monologg/koelectra-base-v3-discriminator"
     #: 모델이 저장될 경로
     save_model_file_prefix: str = "./checkpoints/model"
-    train_log_interval: int = 10
-    valid_log_interval: int = 200
