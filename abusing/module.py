@@ -7,7 +7,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.metrics import classification_report
 from torch.optim import AdamW
-from torch.utils.data import Dataset
 from transformers import ElectraModel
 
 from abusing.config import TrainConfig
@@ -19,9 +18,6 @@ class AbusingClassifier(pl.LightningModule):
     def __init__(
         self,
         config: TrainConfig,
-        train_dataset: Dataset,
-        valid_dataset: Dataset,
-        learning_rate: float = 5e-5,
     ):
         super().__init__()
         self.config = config
@@ -33,11 +29,8 @@ class AbusingClassifier(pl.LightningModule):
         self.bias_classifier = nn.Linear(self.electra.config.hidden_size, 3)
         self.hate_classifier = nn.Linear(self.electra.config.hidden_size, 3)
 
-        self.train_dataset = train_dataset
-        self.valid_dataset = valid_dataset
-
         self.criterion = nn.CrossEntropyLoss()
-        self.learning_rate = learning_rate
+        self.learning_rate = config.learning_rate
 
     def forward(self, *electra_inputs: torch.Tensor) -> torch.Tensor:
         electra_outputs = self.electra.forward(*electra_inputs)

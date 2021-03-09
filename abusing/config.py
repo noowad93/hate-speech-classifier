@@ -32,4 +32,4 @@ class TrainConfig(NamedTuple):
     dev_file_path: str = "./korean-hate-speech/labeled/dev.tsv"
     pretrained_model_name: str = "monologg/koelectra-base-v3-discriminator"
     #: 모델이 저장될 경로
-    save_model_file_prefix: str = "./checkpoints/model"
+    save_model_file_prefix: str = "./checkpoints/"

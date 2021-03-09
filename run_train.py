@@ -39,8 +39,16 @@ def main():
         num_workers=config.num_workers,
         collate_fn=AbusingDataset.collate_fn,
     )
-    lightning_module = AbusingClassifier(config, train_dataset, valid_dataset, config.learning_rate)
-    trainer = pl.Trainer(gpus=config.gpus, max_epochs=config.num_epochs, deterministic=True)
+
+    # Lightning
+    lightning_module = AbusingClassifier(config)
+    trainer = pl.Trainer(
+        gpus=config.gpus,
+        max_epochs=config.num_epochs,
+        deterministic=True,
+        weights_save_path=config.save_model_file_prefix,
+        gradient_clip_val=1.0,
+    )
     trainer.fit(lightning_module, train_dataloader, val_dataloader)
 
 
