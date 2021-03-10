@@ -22,10 +22,10 @@ jobs:
         pip install -r requirements.txt -r requirements-dev.txt
     - name: Lint with flake8
       run: |
-        flake8 hate_speech tests
+        flake8 abusing tests
     - name: Check an order of import statements with isort
       run: |
-        isort -c hate_speech tests
+        isort -c abusing tests
     - name: Check the code formatting with black
       run: |
-        black --check hate_speech tests
+        black --check abusing tests
