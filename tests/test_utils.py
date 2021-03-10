@@ -1,17 +1,15 @@
 import pytest
+
 from abusing.utils import load_data
 
 TEST_FILE_INPUT = """comments\tcontain_gender_bias\tbias\thate
 안녕하세요 저는 정다운입니다.\tFalse\tnone\tnone\n"""
 
+
 @pytest.mark.parametrize(
     "input_data, index,expected_result",
     [
-        pytest.param(
-            TEST_FILE_INPUT,
-            0,
-            ("안녕하세요 저는 정다운입니다.",0,0)
-        ),
+        pytest.param(TEST_FILE_INPUT, 0, ("안녕하세요 저는 정다운입니다.", 0, 0)),
     ],
 )
 def test_load_data(tmpdir, input_data, index, expected_result):
