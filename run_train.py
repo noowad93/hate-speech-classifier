@@ -1,5 +1,6 @@
 import torch
 import logging
+import sys
 from transformers import ElectraTokenizer
 
 import pytorch_lightning as pl
@@ -16,10 +17,18 @@ def main():
     config = TrainConfig()
     # Fixing Seed
     pl.seed_everything(config.seed)
+    # Logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    handler = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter("[%(asctime)s] %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
     # Data Loading...
     raw_train_instances = load_data(config.train_file_path)
     raw_dev_instances = load_data(config.dev_file_path)
+    logger.info(f"훈련용 예시 개수:{len(raw_train_instances)}\t 검증용 예시 개수:{len(raw_dev_instances)}")
 
     tokenizer = ElectraTokenizer.from_pretrained(config.pretrained_model_name, do_lower_case=False)
 
@@ -41,7 +50,7 @@ def main():
     )
 
     # Lightning
-    lightning_module = AbusingClassifier(config)
+    lightning_module = AbusingClassifier(config,logger)
     trainer = pl.Trainer(
         gpus=config.gpus,
         max_epochs=config.num_epochs,

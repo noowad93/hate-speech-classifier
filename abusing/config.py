@@ -1,4 +1,3 @@
-import time
 from typing import NamedTuple
 
 
@@ -25,7 +24,6 @@ class TrainConfig(NamedTuple):
     """
     Data Hyperparameters
     """
-    timestamp: str = time.strftime("%m-%d-%Hh%Mm%Ss", time.localtime(time.time()))
     #: training data 파일 경로
     train_file_path: str = "./korean-hate-speech/labeled/train.tsv"
     #: dev data 파일 경로

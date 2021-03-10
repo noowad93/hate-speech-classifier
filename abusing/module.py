@@ -15,10 +15,7 @@ logger = logging.getLogger("lightning")
 
 
 class AbusingClassifier(pl.LightningModule):
-    def __init__(
-        self,
-        config: TrainConfig,
-    ):
+    def __init__(self, config: TrainConfig, logger: logging.Logger):
         super().__init__()
         self.config = config
 
@@ -31,6 +28,8 @@ class AbusingClassifier(pl.LightningModule):
 
         self.criterion = nn.CrossEntropyLoss()
         self.learning_rate = config.learning_rate
+
+        self.stream_logger = logger
 
     def forward(self, *electra_inputs: torch.Tensor) -> torch.Tensor:
         electra_outputs = self.electra.forward(*electra_inputs)
@@ -70,8 +69,8 @@ class AbusingClassifier(pl.LightningModule):
             target_hate_labels.extend(output[3].view(-1).tolist())
         bias_report = classification_report(target_bias_labels, predicted_bias_labels)
         hate_report = classification_report(target_hate_labels, predicted_hate_labels)
-        logging.info(bias_report)
-        logging.info(hate_report)
+        self.stream_logger.info(bias_report)
+        self.stream_logger.info(hate_report)
 
     def configure_optimizers(self):
         return AdamW(self.parameters(), lr=self.learning_rate)
